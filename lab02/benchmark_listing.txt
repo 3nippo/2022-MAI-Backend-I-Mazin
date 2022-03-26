@@ -1,0 +1,53 @@
+ilyamazin@pop-os:~/Downloads/wrk$ ./wrk -t12 -c400 -d30s http://localhost/ -H "Host: gives_something.com"
+Running 30s test @ http://localhost/
+  12 threads and 400 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     4.54ms    1.90ms  34.01ms   79.61%
+    Req/Sec     7.12k   457.89    14.15k    74.55%
+  2554807 requests in 30.09s, 40.53GB read
+Requests/sec:  84913.30
+Transfer/sec:      1.35GB
+ilyamazin@pop-os:~/Downloads/wrk$ ^C
+ilyamazin@pop-os:~/Downloads/wrk$ ./wrk -t12 -c400 -d30s http://localhost:81/ --latency
+Running 30s test @ http://localhost:81/
+  12 threads and 400 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     1.26ms    1.55ms  24.86ms   87.03%
+    Req/Sec    35.09k     4.83k   60.28k    69.44%
+  Latency Distribution
+     50%  618.00us
+     75%    1.64ms
+     90%    3.27ms
+     99%    7.40ms
+  12597287 requests in 30.09s, 5.07GB read
+Requests/sec: 418634.87
+Transfer/sec:    172.45MB
+ilyamazin@pop-os:~/Downloads/wrk$ ./wrk -t12 -c400 -d30s http://localhost:82/ --latency
+Running 30s test @ http://localhost:82/
+  12 threads and 400 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     2.13ms    1.92ms  28.34ms   85.19%
+    Req/Sec    15.50k     2.09k   38.20k    69.30%
+  Latency Distribution
+     50%    1.65ms
+     75%    2.89ms
+     90%    4.53ms
+     99%    9.17ms
+  5554126 requests in 30.09s, 174.00GB read
+Requests/sec: 184578.68
+Transfer/sec:      5.78GB
+ilyamazin@pop-os:~/Downloads/wrk$ ./wrk -t12 -c400 -d30s http://localhost:83/ --latency
+Running 30s test @ http://localhost:83/
+  12 threads and 400 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     5.51ms    1.11ms  43.90ms   82.93%
+    Req/Sec     5.43k   213.13     5.98k    81.56%
+  Latency Distribution
+     50%    5.43ms
+     75%    5.88ms
+     90%    6.56ms
+     99%    8.78ms
+  1947250 requests in 30.10s, 284.13MB read
+Requests/sec:  64692.77
+Transfer/sec:      9.44MB
+ilyamazin@pop-os:~/Downloads/wrk$
