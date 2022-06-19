@@ -1,0 +1,5 @@
+db name: asc_db
+db admin: asc_admin
+passwords: you know
+list db tables: \dt
+list table permissions: \z table_name
