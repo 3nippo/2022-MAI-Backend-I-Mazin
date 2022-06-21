@@ -28,6 +28,13 @@ def age_bars(request):
     
     return Response(age_bars, status=status.HTTP_200_OK)
 
+@api_view(['GET', 'POST'])
+@permission_classes([permissions.IsAdminUser])
+def gender_bars(request):
+    gender_bars = User.objects.values('gender').annotate(count=Count('gender')).order_by('-count', 'gender')
+    
+    return Response(gender_bars, status=status.HTTP_200_OK)
+
 
 # returns 'items_size' latest items from search history
 #   skipping first 'items_size * items_idx'
