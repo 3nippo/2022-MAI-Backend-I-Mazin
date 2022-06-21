@@ -1,5 +1,6 @@
 from django.db import models
 from account.models import User
+from rest_framework import serializers
 
 # Create your models here.
 class History(models.Model):
@@ -13,6 +14,14 @@ class History(models.Model):
     class Meta:
         db_table = 'history'
 
+class HistorySerializer(serializers.HyperlinkedModelSerializer):
+    user = serializers.PrimaryKeyRelatedField()
+    item = serializers.PrimaryKeyRelatedField()
+
+    class Meta:
+        model = History
+        fields = ['user', 'item', 'results_clicks_num', 'marketing_clicks_num', 'pages_viewed_num']
+
 
 class SearchItem(models.Model):
     question = models.TextField()
@@ -20,3 +29,8 @@ class SearchItem(models.Model):
 
     class Meta:
         db_table = 'search_items'
+
+class SearchItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SearchItem
+        fields = ['question', 'results_num']

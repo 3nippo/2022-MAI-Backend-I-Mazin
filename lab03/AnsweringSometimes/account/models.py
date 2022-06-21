@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
+from rest_framework import serializers
 
 def validate_age(age):
     if age <= 0:
@@ -32,3 +33,8 @@ class User(AbstractUser):
 
     class Meta:
         db_table = 'users'
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'age', 'gender']
