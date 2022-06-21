@@ -10,6 +10,15 @@ def account_data(request):
     serializer = UserSerializer(request.user)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+@api_view(['GET', 'POST'])
+@permission_classes([permissions.IsAdminUser])
+def specific_account_data(request, pk):
+    try:
+        serializer = UserSerializer(User.objects.get(id=pk))
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except User.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
 # returns 'items_size' latest items from search history
 #   skipping first 'items_size * items_idx'
 #   note: items might be updated between requests
