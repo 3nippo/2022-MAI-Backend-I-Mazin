@@ -1,21 +1,20 @@
 from django.db import models
-from account.models import Users
+from account.models import User
 
 # Create your models here.
 class History(models.Model):
-    history_id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(Users, models.DO_NOTHING)
-    item = models.ForeignKey('SearchItems', models.DO_NOTHING)
-    results_clicks_num = models.IntegerField()
-    marketing_clicks_num = models.IntegerField()
-    pages_viewed_num = models.IntegerField()
+    user = models.ForeignKey(User, models.DO_NOTHING, blank=False)
+    item = models.ForeignKey('SearchItem', models.DO_NOTHING, blank=False)
+
+    results_clicks_num = models.IntegerField(blank=False)
+    marketing_clicks_num = models.IntegerField(blank=False)
+    pages_viewed_num = models.IntegerField(blank=False)
 
     class Meta:
         db_table = 'history'
 
 
-class SearchItems(models.Model):
-    item_id = models.AutoField(primary_key=True)
+class SearchItem(models.Model):
     question = models.TextField()
     results_num = models.IntegerField()
 
