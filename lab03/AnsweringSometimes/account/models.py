@@ -27,6 +27,8 @@ class User(AbstractUser):
         choices=Gender.choices,
         blank=False
     )
+    
+    REQUIRED_FIELDS = AbstractUser.REQUIRED_FIELDS + ['age', 'gender']
 
     class Meta:
         db_table = 'users'
