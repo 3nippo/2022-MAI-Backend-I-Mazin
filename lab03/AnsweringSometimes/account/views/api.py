@@ -3,6 +3,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import permissions
 from account.models import User, UserSerializer
+from django.db.models import Count, F
 
 @api_view(['GET', 'POST'])
 @permission_classes([permissions.IsAuthenticated])
@@ -18,6 +19,15 @@ def specific_account_data(request, pk):
         return Response(serializer.data, status=status.HTTP_200_OK)
     except User.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET', 'POST'])
+@permission_classes([permissions.IsAdminUser])
+def age_bars(request):
+    age_bars = User.objects.values('age').annotate(count=Count('age')).order_by('-count', 'age')
+    
+    return Response(age_bars, status=status.HTTP_200_OK)
+
 
 # returns 'items_size' latest items from search history
 #   skipping first 'items_size * items_idx'
