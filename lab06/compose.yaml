@@ -1,0 +1,44 @@
+services:
+  asc_app:
+    image: asc_app
+    build:
+      context: ../
+      dockerfile: lab06/django_app.dockerfile
+    networks:
+      - asc_network
+    depends_on:
+      - postgres
+
+  nginx:
+    image: asc_nginx
+    build:
+      context: ./
+      dockerfile: ./nginx.dockerfile
+    networks:
+      - asc_network
+
+  postgres:
+    image: postgres:14.4
+    container_name: asc_psql
+    environment:
+      POSTGRES_DB_FILE: "/run/secrets/db_name"
+      POSTGRES_USER_FILE: "/run/secrets/db_usr"
+      POSTGRES_PASSWORD_FILE: "/run/secrets/db_pwd"
+    networks:
+      - asc_network
+    secrets:
+      - db_name
+      - db_usr
+      - db_pwd
+
+networks:
+  asc_network:
+    driver: "bridge"
+
+secrets:
+  db_name:
+    external: true
+  db_usr:
+    external: true
+  db_pwd:
+    external: true
