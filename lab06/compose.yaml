@@ -1,8 +1,16 @@
 version: "3.9"
 
 services:
-  asc_app:
+  # bubuntu:
+  #   image: ubuntu:jammy
+  #   command: tail -F anything
+  #   networks:
+  #     - asc_network
+
+  ascapp:
     image: asc_app
+    environment:
+      - DEPLOYED=1
     build:
       context: ../
       dockerfile: lab06/django_app.dockerfile
@@ -10,6 +18,12 @@ services:
       - asc_network
     depends_on:
       - postgres
+    secrets:
+      - db_name
+      - db_usr
+      - db_pwd
+    ports:
+      - "8000:8000"
 
   nginx:
     image: asc_nginx
@@ -18,10 +32,13 @@ services:
       dockerfile: ./nginx.dockerfile
     networks:
       - asc_network
+    depends_on:
+      - ascapp
+    ports:
+      - "8008:8008"
 
   postgres:
     image: postgres:14.4
-    container_name: asc_psql
     environment:
       POSTGRES_DB_FILE: "/run/secrets/db_name"
       POSTGRES_USER_FILE: "/run/secrets/db_usr"
@@ -35,12 +52,13 @@ services:
 
 networks:
   asc_network:
-    driver: "bridge"
+    external:
+      name: "asc_overlay"
 
 secrets:
   db_name:
-    external: true
+    file: name
   db_usr:
-    external: true
+    file: usr
   db_pwd:
-    external: true
+    file: pwd

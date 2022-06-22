@@ -16,4 +16,4 @@ RUN pip3 install -r /app/requirements.txt
 USER nobody
 WORKDIR /app
 # app port: 8000
-CMD python3.10 ./manage.py runserver --noreload
+CMD python3.10 ./manage.py runserver 0.0.0.0:8000 --noreload

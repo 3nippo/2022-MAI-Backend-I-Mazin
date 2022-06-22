@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+from os import getenv
 import getpass
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -26,7 +27,7 @@ SECRET_KEY = 'django-insecure-rc=_rqt(znst^x+k+cq8x+t3$56-0%^h76^ambt7e-0wnqg@59
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['ascapp']
 
 
 # Application definition
@@ -77,16 +78,28 @@ WSGI_APPLICATION = 'AnsweringSometimes.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-db_user = input('DB username: ')
-db_password = getpass.getpass('DB password: ')
+def get_secret(secret_name):
+    with open(f"/run/secrets/{secret_name}") as f:
+        return f.read().rstrip()
+
+if getenv("DEPLOYED") == "1":
+    db_name = get_secret('db_name')
+    db_user = get_secret('db_usr')
+    db_password = get_secret('db_pwd')
+    db_host = 'postgres'
+else:
+    db_name = 'asc_db'
+    db_user = input('DB username: ')
+    db_password = getpass.getpass('DB password: ')
+    db_host = '127.0.0.1'
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'asc_db',
+        'NAME': db_name,
         'USER': db_user,
         'PASSWORD': db_password,
-        'HOST': '127.0.0.1',
+        'HOST': db_host,
         'PORT': '5432'
     }
 }

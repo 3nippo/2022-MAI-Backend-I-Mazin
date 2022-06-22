@@ -1,3 +1,3 @@
 FROM nginx:1.22
 ADD nginx.conf /nginx/
-CMD nginx -c /nginx/nginx.conf
+CMD nginx -c /nginx/nginx.conf -g "daemon off;"
