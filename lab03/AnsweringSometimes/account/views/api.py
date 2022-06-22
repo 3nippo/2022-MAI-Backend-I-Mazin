@@ -45,16 +45,19 @@ def upload_avatar(request):
 
     request_file, = request.FILES.values()
 
-    fs = FileSystemStorage()
-    # f = fs.save(request_file.name, request_file)
     request.user.avatar = request_file
     request.user.save()
 
     f = request.user.avatar
+    
+    try:
+        path = f.path
+    except NotImplementedError:
+        path = 'Not supported'
 
     return Response({
         'url': f.url,
-        'path': f.path,
+        'path': path,
     }, status=status.HTTP_200_OK)
 
 

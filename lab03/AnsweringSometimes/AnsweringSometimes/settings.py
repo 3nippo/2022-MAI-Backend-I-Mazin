@@ -12,7 +12,9 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 from os import getenv
+import os
 import getpass
+import json
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -152,6 +154,23 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # custom auth user model
 AUTH_USER_MODEL = "account.User"
 
+# aws s3
+if getenv('USE_S3') == '1':
+    secrets_path = os.path.join(os.path.dirname(__file__), 'secrets.txt')
+    secrets = None
+    with open(secrets_path) as f:
+        secrets = json.loads(f.read())
+
+    AWS_S3_ACCESS_KEY_ID = secrets['AWS_S3_ACCESS_KEY_ID']
+    AWS_S3_SECRET_ACCESS_KEY = secrets['AWS_S3_SECRET_ACCESS_KEY']
+    AWS_STORAGE_BUCKET_NAME = 'ilya0.0mazin0.0bucket'
+    AWS_DEFAULT_ACL = 'public-read'
+    AWS_S3_REGION_NAME = 'ru-central1'
+    AWS_S3_ENDPOINT_URL = 'https://storage.yandexcloud.net'
+    AWS_LOCATION = 'media'
+    MEDIA_URL = f'{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/{AWS_LOCATION}/'
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+else:
 # media
-MEDIA_ROOT = BASE_DIR / 'local_storage/'
-MEDIA_URL = 'local_storage/'
+    MEDIA_ROOT = BASE_DIR / 'local_storage/'
+    MEDIA_URL = 'local_storage/'
