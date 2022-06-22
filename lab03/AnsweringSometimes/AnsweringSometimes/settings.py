@@ -27,7 +27,10 @@ SECRET_KEY = 'django-insecure-rc=_rqt(znst^x+k+cq8x+t3$56-0%^h76^ambt7e-0wnqg@59
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['ascapp']
+ALLOWED_HOSTS = [
+    'localhost', 
+    'ascapp'
+]
 
 
 # Application definition
@@ -148,3 +151,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # custom auth user model
 AUTH_USER_MODEL = "account.User"
+
+# media
+MEDIA_ROOT = BASE_DIR / 'local_storage/'
+MEDIA_URL = 'local_storage/'

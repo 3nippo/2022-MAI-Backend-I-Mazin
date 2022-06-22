@@ -11,6 +11,9 @@ def validate_age(age):
             params={'age': age},
         )
 
+def user_avatar_path(instance, filename):
+    return 'user_{0}/{1}'.format(instance.id, filename)
+
 # Create your models here.
 class User(AbstractUser):
     age = models.SmallIntegerField(
@@ -28,6 +31,8 @@ class User(AbstractUser):
         choices=Gender.choices,
         blank=False
     )
+
+    avatar = models.ImageField(upload_to=user_avatar_path, null=True, blank=True)
     
     REQUIRED_FIELDS = AbstractUser.REQUIRED_FIELDS + ['age', 'gender']
 

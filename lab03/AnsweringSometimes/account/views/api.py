@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework import permissions
 from account.models import User, UserSerializer
 from django.db.models import Count, F
+from django.core.files.storage import FileSystemStorage
 
 @api_view(['GET', 'POST'])
 @permission_classes([permissions.IsAuthenticated])
@@ -34,6 +35,27 @@ def gender_bars(request):
     gender_bars = User.objects.values('gender').annotate(count=Count('gender')).order_by('-count', 'gender')
     
     return Response(gender_bars, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def upload_avatar(request):
+    if len(request.FILES) != 1:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    request_file, = request.FILES.values()
+
+    fs = FileSystemStorage()
+    # f = fs.save(request_file.name, request_file)
+    request.user.avatar = request_file
+    request.user.save()
+
+    f = request.user.avatar
+
+    return Response({
+        'url': f.url,
+        'path': f.path,
+    }, status=status.HTTP_200_OK)
 
 
 # returns 'items_size' latest items from search history
