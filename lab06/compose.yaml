@@ -22,8 +22,6 @@ services:
       - db_name
       - db_usr
       - db_pwd
-    ports:
-      - "8000:8000"
 
   nginx:
     image: asc_nginx
