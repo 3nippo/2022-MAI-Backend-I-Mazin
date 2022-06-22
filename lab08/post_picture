@@ -1,0 +1,1 @@
+curl -u user1:user1 -H "Host: ascapp:8000" -F person=anonymous -F secret=@../lab02/public/images/me.jpg localhost:8000/account/data/avatar/
